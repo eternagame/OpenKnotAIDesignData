@@ -5,37 +5,37 @@ OpenKnotBench data release,
 previously called Eterna Pseudoknot 17 (EPK-17) 
 
 
-##Release notes
+## Release notes
 
-###[v3.1.0](v3.1.0) (23 March, 2025) 
+### [v3.1.0](v3.1.0) (23 March, 2025) 
 - Experiments for ‘round 4’ designs on 20 240-mer puzzles (collected in Eterna’ [OpenKnot Round 7b lab puzzles](https://eternagame.org/labs/13612324)) are appended to the file. Tab of the [OpenKnot 7 sheet](https://docs.google.com/spreadsheets/d/14su6H6qmXT0xu6WZ4XtBnQMea5_8t2iG0gyf3wd2eWg/edit?gid=2041530679#gid=2041530679) compiles structures and starter sequences. The 20 new puzzles are labeled `Q01`, … `Q20`.
 - For a few of the puzzles, (notable `Q07`, `‘Broad_bean_mottle_virus’`), there were few data with good reads due to an oversight in padding the constructs to fixed length. When comparing design methods, it is best to continue to ignore any designs with experimental `SN_filter`=0.
 - Note that the data set is ‘wider’ (more `reactivity_0001`, `reactivity_0002`,… and `reactivity_error_0001`, `reactivity_error_0002`,… columns) to accommodate the longer RNA’s that host the 240-mers. For the prior shorter puzzles, these extra nucleotides are assigned reactivities of `null`.
 
-###[v3.0.0](v3.0.0) (29 Jan, 2025)
+### [v3.0.0](v3.0.0) (29 Jan, 2025)
 - New experiments for ‘round 2’ designs on EPK-17 puzzles (collected in [Eterna’s OpenKnot Round 6 lab puzzle](https://eternagame.org/labs/13389097)), resolving cDNA bottleneck that increased noise for round 2 in v2.0.x releases.
 - New experiments for ‘round 3’ designs on 20 100-mer puzzles (collected in [Eterna’s OpenKnot Round 7a lab puzzle](https://eternagame.org/labs/13612323)). See [this sheet](https://docs.google.com/spreadsheets/d/14su6H6qmXT0xu6WZ4XtBnQMea5_8t2iG0gyf3wd2eWg/edit?gid=1554464096#gid=1554464096) for compilation of structures and starter sequences, and [this folder](https://drive.google.com/drive/folders/1dnWqZ5lfubics1oAmmSkw_y8Q_Qg4tD5) for provided starter PDB files.
 - The 20 puzzles of round 3 are labeled `P01`, ... `P20`; and the 17 puzzles in rounds 1 and 2 are labeled `W01`,... `W17`.
 
 
-###[v2.0.2](v2.0.2) (27 Oct, 2024)
+### [v2.0.2](v2.0.2) (27 Oct, 2024)
 - Bugfix in `ref_structure` for ~10 designs.
 - Bugfix in `reads` for all round 2 designs. `SN_filter` does not change.
 
-###[v2.0.0](v2.0.0) (27 Oct, 2024)
+### [v2.0.0](v2.0.0) (27 Oct, 2024)
 - Collection of data on 8711 additional submissions for the EPK-17 puzzles – a ‘round 2’ of designs. 
 - Sequences were collected on [Eterna’s OpenKnot Round 6 lab puzzle](https://eternagame.org/labs/13389097).
 - The data are appended to the prior v1.2.0 file, which are ‘round 1’. A new ‘round’ field has been added to the .csv data file.
 - Caveat: Repeats of wild type sequences for some puzzles are noisier in round 2 experiments than round 1, leading to drop in WT scores most notably for `W10` and `W15`. Studies are continuing to track down the origin of this increased noise.
 
-###[v1.2.0](v1.2.0) (15 Aug, 2024)
+### [v1.2.0](v1.2.0) (15 Aug, 2024)
 - Integration of a second large Illumina data set where sequences were rebalanced so that sequences that previously dropped out receive more reads. Now >99% of the sequences have 2A3 profiles with `signal_to_noise` > 1.0.
 
-###[v1.1.0](v1.1.0) (12 August, 2024) 
+### [v1.1.0](v1.1.0) (12 August, 2024) 
 - Reassignment and disambiguation of some MPNN sequences whose lengths did not match the target secondary structures, based on additional information from submitters. This step leads to inclusion of 35 more sequences (total of 8595) that were previously filtered out.
 - Added fields for puzzle, design method, Eterna-based secondary structure score (target OpenKnot Score), reference structures, and residue numbers of submission sequence within the full, padded sequence.
 
-###[v1.0.0](v1.0.0) (8 August, 2024) 
+### [v1.0.0](v1.0.0) (8 August, 2024) 
 - Initial SHAPE data release for 8,560 sequences, based on a NovaSeq run with experimental protocol from Ribonanza ([link](https://www.biorxiv.org/content/10.1101/2024.02.24.581671v2)). 
 - RNA’s were probed with the SHAPE reagent 2A3 which typically acylates nucleotides that are not forming pairs.
 - Designs come from Eterna OpenKnot 4 challenges, and expert laboratories applying automated computational design methods, to [17 pseudoknotted secondary structures](https://docs.google.com/spreadsheets/d/1Ps4rRnhCpUszLSD9ydomN2JjJ3QuFVC4YWVszl3iQ3Y/edit?gid=0#gid=0).
