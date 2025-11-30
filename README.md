@@ -5,6 +5,34 @@ OpenKnotBench data release,
 previously called Eterna Pseudoknot 17 (EPK-17) 
 
 
+## Data description
+
+The data are in CSV format similar to the Kaggle Ribonanza competition, with the following fields:
+
+- `id` - (string) An arbitrary identifier, typically including tags to define which of 17 secondary structure puzzles (e.g., `W01` for week 1), internal ID from the designer, and some information on how the sequence was padded on 5’ and 3’ ends.
+- `sequence` - (string) Describes the RNA sequence, a string of `A`, `C`, `G`, and `U`. Includes 5’ and 3’ pad sequences used to aid experimental characterization.
+- `experiment_type` - (string) Description of the type of chemical mapping experiment that was used to generate each profile (currently only `2A3_MaP`, a SHAPE experimental method).
+- `dataset_name` - (string) arbitrary name of high throughput sequencing dataset from which the reactivity profile was extracted.
+- `reads` - (integer) Number of reads in the high throughput sequencing experiment that were assigned to the RNA sequence, and whose mutations were tabulated to compile the reactivity profile. 
+- `signal_to_noise` - (float) Signal/noise value for the profile, defined as mean(measurement value over probed positions)/mean( statistical error in measurement value over probed positions). Probed positions are those positions that are not `null` in `reactivity` or `reactivity_error`, that have non-zero `reactivity_error`; the very first and last such position in any given profile are also dropped for calculating signal_to_noise. (These values do not need to be predicted in this competition.)
+- `SN_filter` - (Boolean) 0 or 1 depending on whether the profile has `signal_to_noise`> 1.00 and `reads`> 100. A filter used in Ribonanza to define a ‘reasonable’ level of signal/noise.
+- `round` - (integer) which round of the Eterna Pseudoknot 17 benchmark study (1 or 2). Field added in v2.0.0.
+- `puzzle` - (string) which of the 17 puzzles the design was submitted for (e.g., `W01`). Field added in v1.1.0.
+- `method` - (string) which design method was used for the sequence (e.g., `Eterna`). Field added in v1.1.0.
+- `target_openknot_score` - (float) number between 0 and 100 that scores percentage agreement between design’s SHAPE reactivity profile and the target structure. Target unpaired residues are counted as correct if their reactivity is greater than 0.125; target paired residues should have reactivity less than 0.25. A second subscore is computed over just residues in targeted ‘crossed’ pairs [those pairs (`i,j`) where there is at least one other pair (`m,n`) with `m<i<n<j` or `i<m<j<n`]; the two scores are then averaged to give the final score. For both subscores, only computed over residues corresponding to the submitted design, not flanking padded regions added to aid experiments. Field added in v1.1.0.
+- `sub_start` - (integer) position in full sequence at which the submitted design starts. Field added in v1.1.0.
+- `sub_end` - (integer) position in full sequence at which the submitted design ends. Field added in v1.1.0.
+ref_structure - (string) target secondary structure in dot-bracket notation, same length as full sequence (includes pads). Field added in v1.1.0.
+- `design_length` - (integer) length of just the designed sequence, without padding or barcodes added to enable experimental characterization. Field added in v4.2.0.
+- `design_sequence` -  just the designed sequence, without padding or barcodes added to enable experimental characterization. Field added in v4.2.0.
+- `target_structure` - target secondary structure in dot-bracket notation which the design should match
+- `RNet_structure` - predicted secondary structure from RibonanzaNet (RNet). Field added in v4.2.0.
+- `RNet_F1` - harmonic mean of precision and recall of base pairs for `RNet_structure` compared to `target_structure`. Field added in v4.2.0.
+- `RNet-F1_crossed_pair` - harmonic mean of precision and recall of just crossed base pairs for `RNet_structure` compared to `target_structure`. Crossed pairs are those pairs (` i,j `) where there is at least one other pair (` m,n `) with `m<i<n<j` or `i<m<j<n`. Field added in v4.2.0.
+- `reactivity_0001`, `reactivity_0002`,… - (float) An array of floating point numbers, should have the same length as the RNA sequence, which defines the reactivity profile for the RNA. Several positions near the beginning and end of the sequence cannot be probed due to technical reasons, and their reactivity values are `null`. The values should be greater than or equal to zero, but due to experimental errors can become negative. The values are normalized so that the 90th percentile value within the larger dataset is 1.0.
+- `reactivity_error_0001`, `reactivity_error_0002`,… - (float) An array of floating point numbers, should have the same length as the corresponding `reactivity_*` columns, calculated errors in experimental values obtained in reactivity derived from counting statistics in the high-throughput sequencing experiment. 
+
+
 ## Release notes
 
 
@@ -50,29 +78,3 @@ previously called Eterna Pseudoknot 17 (EPK-17)
 - More data, focused on sequences that largely drop out of conventional protocol through a dial-out PCR strategy, are coming in, expected later in August.
 
 
-## Data description
-
-The data are in CSV format similar to the Kaggle Ribonanza competition, with the following fields:
-
-- `id` - (string) An arbitrary identifier, typically including tags to define which of 17 secondary structure puzzles (e.g., `W01` for week 1), internal ID from the designer, and some information on how the sequence was padded on 5’ and 3’ ends.
-- `sequence` - (string) Describes the RNA sequence, a string of `A`, `C`, `G`, and `U`. Includes 5’ and 3’ pad sequences used to aid experimental characterization.
-- `experiment_type` - (string) Description of the type of chemical mapping experiment that was used to generate each profile (currently only `2A3_MaP`, a SHAPE experimental method).
-- `dataset_name` - (string) arbitrary name of high throughput sequencing dataset from which the reactivity profile was extracted.
-- `reads` - (integer) Number of reads in the high throughput sequencing experiment that were assigned to the RNA sequence, and whose mutations were tabulated to compile the reactivity profile. 
-- `signal_to_noise` - (float) Signal/noise value for the profile, defined as mean(measurement value over probed positions)/mean( statistical error in measurement value over probed positions). Probed positions are those positions that are not `null` in `reactivity` or `reactivity_error`, that have non-zero `reactivity_error`; the very first and last such position in any given profile are also dropped for calculating signal_to_noise. (These values do not need to be predicted in this competition.)
-- `SN_filter` - (Boolean) 0 or 1 depending on whether the profile has `signal_to_noise`> 1.00 and `reads`> 100. A filter used in Ribonanza to define a ‘reasonable’ level of signal/noise.
-- `round` - (integer) which round of the Eterna Pseudoknot 17 benchmark study (1 or 2). Field added in v2.0.0.
-- `puzzle` - (string) which of the 17 puzzles the design was submitted for (e.g., `W01`). Field added in v1.1.0.
-- `method` - (string) which design method was used for the sequence (e.g., `Eterna`). Field added in v1.1.0.
-- `target_openknot_score` - (float) number between 0 and 100 that scores percentage agreement between design’s SHAPE reactivity profile and the target structure. Target unpaired residues are counted as correct if their reactivity is greater than 0.125; target paired residues should have reactivity less than 0.25. A second subscore is computed over just residues in targeted ‘crossed’ pairs [those pairs (`i,j`) where there is at least one other pair (`m,n`) with `m<i<n<j` or `i<m<j<n`]; the two scores are then averaged to give the final score. For both subscores, only computed over residues corresponding to the submitted design, not flanking padded regions added to aid experiments. Field added in v1.1.0.
-- `sub_start` - (integer) position in full sequence at which the submitted design starts. Field added in v1.1.0.
-- `sub_end` - (integer) position in full sequence at which the submitted design ends. Field added in v1.1.0.
-ref_structure - (string) target secondary structure in dot-bracket notation, same length as full sequence (includes pads). Field added in v1.1.0.
-- `design_length` - (integer) length of just the designed sequence, without padding or barcodes added to enable experimental characterization. Field added in v4.2.0.
-- `design_sequence` -  just the designed sequence, without padding or barcodes added to enable experimental characterization. Field added in v4.2.0.
-- `target_structure` - target secondary structure in dot-bracket notation which the design should match
-- `RNet_structure` - predicted secondary structure from RibonanzaNet (RNet). Field added in v4.2.0.
-- `RNet_F1` - harmonic mean of precision and recall of base pairs for `RNet_structure` compared to `target_structure`. Field added in v4.2.0.
-- `RNet-F1_crossed_pair` - harmonic mean of precision and recall of just crossed base pairs for `RNet_structure` compared to `target_structure`. Crossed pairs are those pairs (` i,j `) where there is at least one other pair (` m,n `) with `m<i<n<j` or `i<m<j<n`. Field added in v4.2.0.
-- `reactivity_0001`, `reactivity_0002`,… - (float) An array of floating point numbers, should have the same length as the RNA sequence, which defines the reactivity profile for the RNA. Several positions near the beginning and end of the sequence cannot be probed due to technical reasons, and their reactivity values are `null`. The values should be greater than or equal to zero, but due to experimental errors can become negative. The values are normalized so that the 90th percentile value within the larger dataset is 1.0.
-- `reactivity_error_0001`, `reactivity_error_0002`,… - (float) An array of floating point numbers, should have the same length as the corresponding `reactivity_*` columns, calculated errors in experimental values obtained in reactivity derived from counting statistics in the high-throughput sequencing experiment. 
