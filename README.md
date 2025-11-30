@@ -7,6 +7,12 @@ previously called Eterna Pseudoknot 17 (EPK-17)
 
 ## Release notes
 
+
+### [v4.2.0](v4.2.0) (30 November, 2025) 
+- Data on ‘round 4’ designs on 20 240-mer puzzles (collected in Eterna’ [OpenKnot Round 7b lab puzzles](https://eternagame.org/labs/13612324)), including puzzles like `Q07` (`‘Broad_bean_mottle_virus’`) have been rescued and added.
+- Data on `struct2seq` designs and `codesign-RFdiff` for 'round 4' have also been added.
+- New columns `target_structure`, `RNet_structure`, `RNet_F1`, `RNet_F1_crossed_pair` have been added to allow filtering of designs whose SHAPE profiles match the target profiles but with the wrong secondary structures, as appears to have occurred in some 'round 3' designs, as evaluated by mutate-map-rescue experiments (to be released shortly). 
+
 ### [v3.1.0](v3.1.0) (23 March, 2025) 
 - Experiments for ‘round 4’ designs on 20 240-mer puzzles (collected in Eterna’ [OpenKnot Round 7b lab puzzles](https://eternagame.org/labs/13612324)) are appended to the file. Tab of the [OpenKnot 7 sheet](https://docs.google.com/spreadsheets/d/14su6H6qmXT0xu6WZ4XtBnQMea5_8t2iG0gyf3wd2eWg/edit?gid=2041530679#gid=2041530679) compiles structures and starter sequences. The 20 new puzzles are labeled `Q01`, … `Q20`.
 - For a few of the puzzles, (notable `Q07`, `‘Broad_bean_mottle_virus’`), there were few data with good reads due to an oversight in padding the constructs to fixed length. When comparing design methods, it is best to continue to ignore any designs with experimental `SN_filter`=0.
@@ -62,5 +68,11 @@ The data are in CSV format similar to the Kaggle Ribonanza competition, with the
 - `sub_start` - (integer) position in full sequence at which the submitted design starts. Field added in v1.1.0.
 - `sub_end` - (integer) position in full sequence at which the submitted design ends. Field added in v1.1.0.
 ref_structure - (string) target secondary structure in dot-bracket notation, same length as full sequence (includes pads). Field added in v1.1.0.
+- `design_length` - (integer) length of just the designed sequence, without padding or barcodes added to enable experimental characterization. Field added in v4.2.0.
+- `design_sequence` -  just the designed sequence, without padding or barcodes added to enable experimental characterization. Field added in v4.2.0.
+- `target_structure` - target secondary structure in dot-bracket notation which the design should match
+- `RNet_structure` - predicted secondary structure from RibonanzaNet (RNet). Field added in v4.2.0.
+- `RNet_F1` - harmonic mean of precision and recall of base pairs for `RNet_structure` compared to `target_structure`. Field added in v4.2.0.
+- `RNet-F1_crossed_pair` - harmonic mean of precision and recall of just crossed base pairs for `RNet_structure` compared to `target_structure`. Crossed pairs are those pairs (` i,j `) where there is at least one other pair (` m,n `) with `m<i<n<j` or `i<m<j<n`. Field added in v4.2.0.
 - `reactivity_0001`, `reactivity_0002`,… - (float) An array of floating point numbers, should have the same length as the RNA sequence, which defines the reactivity profile for the RNA. Several positions near the beginning and end of the sequence cannot be probed due to technical reasons, and their reactivity values are `null`. The values should be greater than or equal to zero, but due to experimental errors can become negative. The values are normalized so that the 90th percentile value within the larger dataset is 1.0.
 - `reactivity_error_0001`, `reactivity_error_0002`,… - (float) An array of floating point numbers, should have the same length as the corresponding `reactivity_*` columns, calculated errors in experimental values obtained in reactivity derived from counting statistics in the high-throughput sequencing experiment. 
