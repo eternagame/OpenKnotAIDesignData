@@ -24,17 +24,24 @@ The data are in CSV format similar to the Kaggle Ribonanza competition, with the
 - `sub_end` - (integer) position in full sequence at which the submitted design ends. Field added in v1.1.0.
 ref_structure - (string) target secondary structure in dot-bracket notation, same length as full sequence (includes pads). Field added in v1.1.0.
 - `design_length` - (integer) length of just the designed sequence, without padding or barcodes added to enable experimental characterization. Field added in v4.2.0.
-- `design_sequence` -  just the designed sequence, without padding or barcodes added to enable experimental characterization. Field added in v4.2.0.
-- `target_structure` - target secondary structure in dot-bracket notation which the design should match
-- `RNet_structure` - predicted secondary structure from RibonanzaNet (RNet). Field added in v4.2.0.
-- `RNet_F1` - harmonic mean of precision and recall of base pairs for `RNet_structure` compared to `target_structure`. Field added in v4.2.0.
-- `RNet-F1_crossed_pair` - harmonic mean of precision and recall of just crossed base pairs for `RNet_structure` compared to `target_structure`. Crossed pairs are those pairs (` i,j `) where there is at least one other pair (` m,n `) with `m<i<n<j` or `i<m<j<n`. Field added in v4.2.0.
+- `design_sequence` - (string)  just the designed sequence, without padding or barcodes added to enable experimental characterization. Field added in v4.2.0.
+- `target_structure` - (string) target secondary structure in dot-bracket notation which the design should match
+- `RNet_structure` - (string) predicted secondary structure from RibonanzaNet (RNet). Field added in v4.2.0.
+- `RNet_F1` - (float) harmonic mean of precision and recall of base pairs for `RNet_structure` compared to `target_structure`. Field added in v4.2.0.
+- `RNet-F1_crossed_pair` - (float) harmonic mean of precision and recall of just crossed base pairs for `RNet_structure` compared to `target_structure`. Crossed pairs are those pairs (` i,j `) where there is at least one other pair (` m,n `) with `m<i<n<j` or `i<m<j<n`. Field added in v4.2.0.
+- `mutA`,`mutB` [for M2R data only] - (integer) position of mutation in designed sequence (ranges from 1 to `design_length`, or `null` if no mutation). 
+- `rescue_factor` [for double mutants in M2R data only] - (float) fraction of SHAPE profile RMSD expected from independent addition in quadrature of the RMSD of single mutants that is restored by the double mutant. 0 means no rescue; 1 means full rescue.
 - `reactivity_0001`, `reactivity_0002`,… - (float) An array of floating point numbers, should have the same length as the RNA sequence, which defines the reactivity profile for the RNA. Several positions near the beginning and end of the sequence cannot be probed due to technical reasons, and their reactivity values are `null`. The values should be greater than or equal to zero, but due to experimental errors can become negative. The values are normalized so that the 90th percentile value within the larger dataset is 1.0.
 - `reactivity_error_0001`, `reactivity_error_0002`,… - (float) An array of floating point numbers, should have the same length as the corresponding `reactivity_*` columns, calculated errors in experimental values obtained in reactivity derived from counting statistics in the high-throughput sequencing experiment. 
 
 
 ## Release notes
 
+### [v4.3.0](v4.3.0) (10 December, 2025) 
+- Mutate-map-rescue (M2R-seq) experiments added as [OK7a\_M2R\_data.v4.3.0.csv](v4.3.0/OK7a_M2R_data.v4.3.0.csv).  
+- These M2R-seq data include measurements on top designs from each tested method for Round 3. The top OpenKnot score design for each method for each target were selected amongst those with `RNet_F1` greater than equal to 80. (If no designs passed this secondary structure accuracy cutoff, the top score design was still tested.). 
+- The constructs include the starting design and for each target base pair, the single mutants converting each pair's nucleotide to the other, and the double mutant which should lead to compensatory rescue of the secondary structure.
+- For the double mutants, rescue factor is provided that gives the fraction of SHAPE RMSD between wildtype and the single mutants (added in quadrature for the two mutant) that is recovered by the double mutant. This number is 0 for no rescue (no evidence for pair) and is 1 for full rescue. 
 
 ### [v4.2.0](v4.2.0) (30 November, 2025) 
 - Data on ‘round 4’ designs on 20 240-mer puzzles (collected in Eterna’ [OpenKnot Round 7b lab puzzles](https://eternagame.org/labs/13612324)), including puzzles like `Q07` (`‘Broad_bean_mottle_virus’`) have been rescued and added.
