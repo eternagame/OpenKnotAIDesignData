@@ -5,7 +5,8 @@ OpenKnotBench data release,
 previously called Eterna Pseudoknot 17 (EPK-17) 
 
 ## Files
-- [Data](Data) - CSV formatted files with SHAPE data from four rounds of the OpenKnot AI competition, held on Eterna, as well as mutate-map-rescue (M2R) experiments on top design from Round 3.
+- [Data](Data) - CSV formatted files with SHAPE data from four rounds of the OpenKnot AI competition, held on Eterna, as well as mutate-map-rescue (M2R) experiments and mutate-and-map (M2) single-mutant libraries on top designs from Round 3.
+  - `OK7a_M2_data.v4.5.2.csv` — M2 SHAPE data on single-nucleotide mutant libraries for all 20 Round 3 targets × 8 design methods (~100 mutants per design, 14,136 sequences total). Added in v4.5.2.
 - [Targets](Targets) - Pseudoknotted secondary structures provided to AI designers in Rounds 1 and 2, 3, and 4.
 - [PDB](PDB) - PDB files of modeled or experimental coordinates associated with subset of targets in Rounds 1 and 2 and all targets in Rounds 3 and 4. Additional RFDpoly backbones are being made available in a [Zenodo archive](https://zenodo.org/records/18666308). 
 
@@ -34,8 +35,12 @@ ref_structure - (string) target secondary structure in dot-bracket notation, sam
 - `RNet_structure` - (string) predicted secondary structure from RibonanzaNet (RNet). Field added in v4.2.0.
 - `RNet_F1` - (float) harmonic mean of precision and recall of base pairs for `RNet_structure` compared to `target_structure`. Field added in v4.2.0.
 - `RNet-F1_crossed_pair` - (float) harmonic mean of precision and recall of just crossed base pairs for `RNet_structure` compared to `target_structure`. Crossed pairs are those pairs (` i,j `) where there is at least one other pair (` m,n `) with `m<i<n<j` or `i<m<j<n`. Field added in v4.2.0.
-- `mutA`,`mutB` [for M2R data only] - (integer) position of mutation in designed sequence (ranges from 1 to `design_length`, or `null` if no mutation). 
+- `mutA` [for M2R and M2 data] - (integer) position of mutation in designed sequence (ranges from 1 to `design_length`, or `null` if no mutation).
+- `mutB` [for M2R data only] - (integer) position of second mutation in designed sequence (for double mutants in M2R); `null` for single mutants and wild type.
 - `rescue_factor` [for double mutants in M2R data only] - (float) fraction of SHAPE profile RMSD expected from independent addition in quadrature of the RMSD of single mutants that is restored by the double mutant. 0 means no rescue; 1 means full rescue.
+- `M2_structure` [for M2 data, wild-type rows only] - (string) secondary structure predicted from the M2 Z-score contact map by ShapeKnots (RNAstructure). Field added in v4.5.2.
+- `M2_F1` [for M2 data, wild-type rows only] - (float) F1 accuracy (harmonic mean of precision and recall of base pairs) for `M2_structure` compared to `target_structure`. Field added in v4.5.2.
+- `M2_F1_crossed_pair` [for M2 data, wild-type rows only] - (float) F1 accuracy restricted to crossed (pseudoknot) base pairs only. Field added in v4.5.2.
 - `reactivity_0001`, `reactivity_0002`,… - (float) An array of floating point numbers, should have the same length as the RNA sequence, which defines the reactivity profile for the RNA. Several positions near the beginning and end of the sequence cannot be probed due to technical reasons, and their reactivity values are `null`. The values should be greater than or equal to zero, but due to experimental errors can become negative. The values are normalized so that the 90th percentile value within the larger dataset is 1.0.
 - `reactivity_error_0001`, `reactivity_error_0002`,… - (float) An array of floating point numbers, should have the same length as the corresponding `reactivity_*` columns, calculated errors in experimental values obtained in reactivity derived from counting statistics in the high-throughput sequencing experiment. 
 
@@ -43,11 +48,26 @@ ref_structure - (string) target secondary structure in dot-bracket notation, sam
 ## Release notes
 
 
-### [v4.5.0](Data) (17 February, 2026) 
+### [v4.5.2](Data) (9 May, 2026)
+- Add mutate-and-map (M2) single-mutant SHAPE data as `OK7a_M2_data.v4.5.2.csv`.
+  This file covers single-nucleotide mutant libraries (one substitution per position)
+  for all 20 Round 3 targets × 8 design methods, probed with 2A3 SHAPE (Ultima
+  sequencing, 2025-09-04), totaling 14,136 sequences (160 wild-type + 13,976 single
+  mutants; median 98 mutants per design, range 52–100).
+- Unlike the M2R file, `OK7a_M2_data.v4.5.2.csv` contains only `mutA` (no `mutB` or
+  `rescue_factor`). Wild-type rows include new columns `M2_structure`, `M2_F1`, and
+  `M2_F1_crossed_pair` giving the secondary structure inferred from the M2 Z-score
+  contact map by ShapeKnots and its accuracy vs. the target pseudoknot structure.
+
+### [v4.5.1](Data) (19 February, 2026) 
+- For clarity, change method name 'WT' to be 'Starting sequence'.  
+- Hot fix to specification of gRNAde vs. gRNAde-no3d in `OK7a_M2R_data.v4.5.1.csv`.
+
+### [v4.5.0](https://github.com/eternagame/OpenKnotAIDesignData/releases/tag/v4.5.0) (17 February, 2026) 
 - 'Publication release candidate'.
 - Remove previous versions to minimize download sizes of latest [releases](https://github.com/eternagame/OpenKnotAIDesignData/releases).
-- Rescore of OpenKnot experiments  [OpenKnotBench_data.v4.5.0.csv](v4.5.0/OpenKnotBench_data.v4.5.0.csv) to give best score for 2 structures in two cases that had two slightly different target structures released at different times (target W09 in Rounds 1-2 and target P06 in Round 3).  
-- Mutate-map-rescue (M2R-seq) experiments updated to clarify gRNAde vs. gRNAde-no3d as [OK7a\_M2R\_data.v4.5.0.csv](v4.5.0/OK7a_M2R_data.v4.5.0.csv). Fix column name `ref_structure` to be `target_structure`.
+- Rescore of OpenKnot experiments `OpenKnotBench_data.v4.5.0.csv` to give best score for 2 structures in two cases that had two slightly different target structures released at different times (target W09 in Rounds 1-2 and target P06 in Round 3).  
+- Mutate-map-rescue (M2R-seq) experiments updated to clarify gRNAde vs. gRNAde-no3d as `OK7a_M2R_data.v4.5.0.csv`. Fix column name `ref_structure` to be `target_structure`.
 
 ### [v4.3.0](https://github.com/eternagame/OpenKnotAIDesignData/releases/tag/v4.3.0) (10 December, 2025) 
 - Mutate-map-rescue (M2R-seq) experiments added as [OK7a\_M2R\_data.v4.3.0.csv](v4.3.0/OK7a_M2R_data.v4.3.0.csv).  
