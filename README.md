@@ -6,6 +6,7 @@ previously called Eterna Pseudoknot 17 (EPK-17)
 
 ## Files
 - [Data](Data) - CSV formatted files with SHAPE data from four rounds of the OpenKnot AI competition, held on Eterna, as well as mutate-map-rescue (M2R) experiments and mutate-and-map (M2) single-mutant libraries on top designs from Round 3.
+  - `OpenKnotBench_data.v4.5.3.csv` — SHAPE data and scores for all four rounds of OpenKnot designs (36,761 sequences).
   - `OK7a_M2_data.v4.5.2.csv` — M2 SHAPE data on single-nucleotide mutant libraries for all 20 Round 3 targets × 8 design methods (~100 mutants per design, 14,136 sequences total). Added in v4.5.2.
 - [Targets](Targets) - Pseudoknotted secondary structures provided to AI designers in Rounds 1 and 2, 3, and 4.
 - [PDB](PDB) - PDB files of modeled or experimental coordinates associated with subset of targets in Rounds 1 and 2 and all targets in Rounds 3 and 4. Additional RFDpoly backbones are being made available in a [Zenodo archive](https://zenodo.org/records/18666308). 
@@ -33,8 +34,8 @@ ref_structure - (string) target secondary structure in dot-bracket notation, sam
 - `design_sequence` - (string)  just the designed sequence, without padding or barcodes added to enable experimental characterization. Field added in v4.2.0.
 - `target_structure` - (string) target secondary structure in dot-bracket notation which the design should match
 - `RNet_structure` - (string) predicted secondary structure from RibonanzaNet (RNet). Field added in v4.2.0.
-- `RNet_F1` - (float) harmonic mean of precision and recall of base pairs for `RNet_structure` compared to `target_structure`. Field added in v4.2.0.
-- `RNet-F1_crossed_pair` - (float) harmonic mean of precision and recall of just crossed base pairs for `RNet_structure` compared to `target_structure`. Crossed pairs are those pairs (` i,j `) where there is at least one other pair (` m,n `) with `m<i<n<j` or `i<m<j<n`. Field added in v4.2.0.
+- `RNet_F1` - (float) harmonic mean of precision and recall of base pairs for `RNet_structure` compared to `target_structure`. Computed against the per-row `target_structure` (for W09 and P06, the better-scoring of the two released target variants). Field added in v4.2.0; recomputed in v4.5.3.
+- `RNet_F1_crossed_pair` - (float) harmonic mean of precision and recall of just crossed base pairs for `RNet_structure` compared to `target_structure`. Crossed pairs are those pairs (` i,j `) where there is at least one other pair (` m,n `) with `m<i<n<j` or `i<m<j<n`. Field added in v4.2.0.
 - `mutA` [for M2R and M2 data] - (integer) position of mutation in designed sequence (ranges from 1 to `design_length`, or `null` if no mutation).
 - `mutB` [for M2R data only] - (integer) position of second mutation in designed sequence (for double mutants in M2R); `null` for single mutants and wild type.
 - `rescue_factor` [for double mutants in M2R data only] - (float) fraction of SHAPE profile RMSD expected from independent addition in quadrature of the RMSD of single mutants that is restored by the double mutant. 0 means no rescue; 1 means full rescue.
@@ -47,6 +48,12 @@ ref_structure - (string) target secondary structure in dot-bracket notation, sam
 
 ## Release notes
 
+
+### [v4.5.3](Data) (16 October, 2026)
+- Recompute `RNet_F1` and `RNet_F1_crossed_pair` in `OpenKnotBench_data.v4.5.3.csv` against the
+  shipped `target_structure`. In v4.5.0–v4.5.1, 487 rows for targets W09 (Rounds 1–2) and P06
+  (Round 3) carried F1 values computed against the other released variant of the target structure
+  (fixes [#2](https://github.com/eternagame/OpenKnotAIDesignData/issues/2)). No other columns change.
 
 ### [v4.5.2](Data) (9 May, 2026)
 - Add mutate-and-map (M2) single-mutant SHAPE data as `OK7a_M2_data.v4.5.2.csv`.
